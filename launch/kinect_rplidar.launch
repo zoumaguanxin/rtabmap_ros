@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <launch>
         <arg name="pi/2" value="1.5707963267948966"/>
-	<arg name="optical_rotate" value="0 0 0 -$(arg pi/2) 0 -$(arg pi/2)"/>
-         
+	<arg name="optical_rotate" value="-0.13 0 0.05 0 3.1415926 3.1415926"/>
+        <arg name="laser_position" value="0 0 0.26 0 0 0"/>
     	<!--publish the tf from camera_link to base_link-->
 	<node pkg="tf" type="static_transform_publisher" name="camera_to_base_link" args="$(arg optical_rotate) base_link camera_link 100"/>
         
 	<!--publish the tf from laser to base_link-->
-        <node pkg="tf" type="static_transform_publisher" name="laser_to_base_link" args="$(arg optical_rotate) base_link laser 100"/>
+        <node pkg="tf" type="static_transform_publisher" name="laser_to_base_link" args="$(arg laser_position) base_link laser 100"/>
         
 	<include file="$(find rplidar_ros)/launch/rplidar.launch"/>
 	
