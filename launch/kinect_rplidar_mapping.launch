@@ -9,7 +9,7 @@
   
   <!-- Choose visualization -->
   <arg name="rviz" default="true" />
-  <arg name="rtabmapviz" default="false" />
+  <arg name="rtabmapviz" default="true" />
   
   <!-- Choose hector_slam or icp_odometry for odometry -->
   <arg name="hector" default="true" />
