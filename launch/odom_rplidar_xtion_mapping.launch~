@@ -2,8 +2,6 @@
 <launch>
   <!--include file="$(find autolabor_keyboard_control)/launch/keyboard_move.launch"/>
   <include file="$(find rtabmap_sa)/launch/kinect_rplidar.launch"/-->
-  <arg name="rtabmapviz" default="false"/>
-  <arg name="rviz" default="true"/>
   <group ns="rtabmap">
     <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen" args="--delete_db_on_start">
           <param name="frame_id" type="string" value="base_link"/>
