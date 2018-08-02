@@ -22,6 +22,8 @@
           <param name="queue_size" type="int" value="10"/>
 
           <!-- RTAB-Map's parameters -->
+ 	  <param name="Odom/Strategy" 	          type="string" value="1"/>  <!--default 0=frame to map, 1=frame2frame,2=Fovis, 3=viso2, 4=DVO-SLAM, 5=ORB_SLAM2-->
+	  <param name="Odom/FilteringStrategy"    type="string" value="1"/>  <!--default 0=No filter, 1=Kalman, 2=Particle filtering-->
           <param name="RGBD/NeighborLinkRefining" type="string" value="true"/>
           <param name="RGBD/ProximityBySpace"     type="string" value="true"/>
           <param name="RGBD/AngularUpdate"        type="string" value="0.01"/>
@@ -35,7 +37,7 @@
           <param name="Rtabmap/TimeThr"           type="string" value="700"/>
           <param name="Mem/RehearsalSimilarity"   type="string" value="0.45"/>
 	  <param name="Icp/CorrespondenceRatio"   type="string" value="0.2"/>
-	<param name="Icp/MaxCorrespondenceDistance" type="string" value="0.1"/>
+	<param name="Icp/MaxCorrespondenceDistance" type="string" value="0.1"/><!--if pointmatcherlib wasn't found, the default is 0.05, else default 0.1-->
 	<param name="Icp/MaxTranslation" type="string" value="0.2"/>
         <param name="Icp/MaxRotation" type="string" value="0.78"/>
     </node>
