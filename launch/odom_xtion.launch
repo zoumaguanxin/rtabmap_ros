@@ -1,54 +1,16 @@
+<?xml version="1.0"?>
 <launch>
-  <arg name="rtabmapviz" default="false"/>
-  <arg name="rviz" default="true"/>
-  <group ns="rtabmap">
-    <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen" args="--delete_db_on_start">
-          <param name="frame_id" type="string" value="base_link"/>
+        <arg name="pi/2" value="1.5707963267948966"/>
+	<arg name="optical_rotate" value="0.235 0 0.595 0 0 0"/>
+        <arg name="laser_position" value="0 0 0.672 -3.314444 0 0"/>
+	<!--publish the tf from laser to base_link-->
+        <node pkg="tf" type="static_transform_publisher" name="laser_to_base_link" args="$(arg laser_position) base_link laser 100"/>
+        
+	<include file="$(find rplidar_ros)/launch/rplidar.launch"/>
+	
+ 	<include file="$(find autolabor_keyboard_control)/launch/keyboard_move.launch"/>        
 
-          <param name="subscribe_depth" type="bool" value="true"/>
+        
+	<!--node name="zed_center_to_camera_link" pkg="tf" type="static_transform_publisher" args="0 0 0 -$(arg pi/2) 0 -$(arg pi/2) camera_link zed_center 100" /-->
 
-          <remap from="odom" to="/odom"/>
-
-          <remap from="rgb/image" to="/camera/rgb/image_rect_color"/>
-          <remap from="depth/image" to="/camera/depth_registered/image_raw"/>
-          <remap from="rgb/camera_info" to="/camera/rgb/camera_info"/>
-
-          <param name="queue_size" type="int" value="10"/>
-
-          <!-- RTAB-Map's parameters -->
-          <param name="RGBD/AngularUpdate" type="string" value="0.01"/>
-          <param name="RGBD/LinearUpdate" type="string" value="0.01"/>
-          <param name="Rtabmap/TimeThr" type="string" value="700"/>
-          <param name="Mem/RehearsalSimilarity" type="string" value="0.45"/>
-          <param name="RGBD/OptimizeFromGraphEnd" type="string" value="true"/>
-    </node>
- <node if="$(arg rtabmapviz)" pkg="rtabmap_ros" type="rtabmapviz" name="rtabmapviz" args="-d $(find rtabmap_ros)/launch/config/rgbd_gui.ini" output="screen">
-  	  <param name="subscribe_depth"     type="bool" value="true"/>
-      <param name="subscribe_laserScan" type="bool" value="true"/>
-      <param name="frame_id"            type="string" value="base_link"/>
-      <param unless="$(arg hector)" name="subscribe_odom_info" type="bool" value="true"/>
-    
-      <remap from="rgb/image"       to="/camera/rgb/image_rect_color"/>
-      <remap from="depth/image"     to="/camera/depth_registered/image_raw"/>
-      <remap from="rgb/camera_info" to="/camera/rgbd/camera_info"/>
-      <remap from="scan"            to="/scan"/>
-      <remap from="odom"            to="/odom"/>
-      
-      <param name="rgb/image_transport"   type="string" value="compressed"/>
-      <param name="depth/image_transport" type="string" value="compressedDepth"/>
-    </node>  
-
-  </group>
-<node if="$(arg rviz)" pkg="rviz" type="rviz" name="rviz" args="-d $(find rtabmap_ros)/launch/config/demo_robot_mapping.rviz" output="screen"/>
-   <node pkg="nodelet" type="nodelet" name="points_xyzrgb" args="standalone rtabmap_ros/point_cloud_xyzrgb">
-    <remap from="rgb/image"       to="/camera/rgb/image_rect_color"/>
-    <remap from="depth/image"     to="/camera/depth_registered/image_raw"/>
-    <remap from="rgb/camera_info" to="/camera/rgbd/camera_info"/>
-    <remap from="cloud"           to="voxel_cloud" />
-    
-    <param name="rgb/image_transport"   type="string" value="compressed"/>
-    <param name="depth/image_transport" type="string" value="compressedDepth"/>
-
-    <param name="voxel_size" type="double" value="0.01"/>
-  </node>
 </launch>
