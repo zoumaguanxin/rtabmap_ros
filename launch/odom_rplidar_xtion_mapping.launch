@@ -23,6 +23,7 @@
 
           <!-- RTAB-Map's parameters -->
  	  <param name="Odom/Strategy" 	          type="string" value="1"/>  <!--default 0=frame to map, 1=frame2frame,2=Fovis, 3=viso2, 4=DVO-SLAM, 5=ORB_SLAM2-->
+	  <param name="Odom/Holonomic"		  type="string" value="false"/> <!--default 1, A robot is holonomic when the number of controllable degrees of freedom is equal to the total degrees of freedom-->
 	  <param name="Odom/FilteringStrategy"    type="string" value="1"/>  <!--default 0=No filter, 1=Kalman, 2=Particle filtering-->
           <param name="RGBD/NeighborLinkRefining" type="string" value="true"/>
           <param name="RGBD/ProximityBySpace"     type="string" value="true"/>
@@ -30,6 +31,7 @@
           <param name="RGBD/LinearUpdate"         type="string" value="0.01"/>
           <param name="RGBD/OptimizeFromGraphEnd" type="string" value="true"/><!--false-->
           <param name="Optimizer/Slam2D"          type="string" value="true"/>
+          <param name="Reg/RepeatOnce"            type="string" value="true"/><!--default true, do a second registration with the output of the first registration as guess. Only done if no guess was provided for the first registration-->
           <param name="Reg/Strategy"              type="string" value="2"/> <!-- 1=ICP ,0=Vis, 2=VisIcp-->
           <param name="Reg/Force3DoF"             type="string" value="true"/>
           <param name="Vis/MinInliers"            type="string" value="5"/>
