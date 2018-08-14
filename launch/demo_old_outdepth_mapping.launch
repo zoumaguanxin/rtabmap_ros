@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+  <!--include file="$(find autolabor_keyboard_control)/launch/keyboard_move.launch"/>
+  <include file="$(find rtabmap_sa)/launch/kinect_rplidar.launch"/-->
+  <include file="$(find rtabmap_sa)/launch/camera_tf.launch"/> <!--this launch is used to publish tf from camera_rgb_frame to camera_link. if this transform has been publish correctly, comment this line-->  
+  <include file="$(find rtabmap_sa)/launch/odom_rplidar_xtion_mapping.launch"/>
+</launch>

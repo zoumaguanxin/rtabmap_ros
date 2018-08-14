@@ -2,9 +2,11 @@
 <launch>
   <!--include file="$(find autolabor_keyboard_control)/launch/keyboard_move.launch"/>
   <include file="$(find rtabmap_sa)/launch/kinect_rplidar.launch"/-->
+  <include file="$(find rtabmap_sa)/launch/camera_tf.launch"/> <!--this launch is used to publish tf from camera_rgb_frame to camera_link. if this transform has been publish correctly, comment this line-->  
   <arg name="rtabmapviz" default="true"/>
   <arg name="hector"     value="false"/>
   <arg name="rviz" default="false"/>
+  <param name="use_sim_time" type="bool"  value="true"/>
   <group ns="rtabmap">
     <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen" args="--delete_db_on_start">
           <param name="frame_id" type="string" value="base_link"/>
@@ -20,66 +22,32 @@
           <remap from="depth/image" to="/camera/depth_registered/image_raw"/>
           <remap from="rgb/camera_info" to="/camera/rgb/camera_info"/>
 
-          <param name="queue_size" type="int" value="50"/>
+          <param name="queue_size" type="int" value="50"/> <!--default 10-->
           <param name="wait_for_transform_duration"  type="double"  value="0.333"/>
           <param name="appro_synx"                   type="bool"    value="true"/>
-
           <!-- RTAB-Map's parameters -->
  	  <param name="Odom/Strategy" 	          type="string" value="1"/>  <!--default 0=frame to map, 1=frame2frame,2=Fovis, 3=viso2, 4=DVO-SLAM, 5=ORB_SLAM2-->
-	  <param name="Odom/Holonomic"		  type="string" value="false"/> <!--default 1, A robot is holonomic when the number of controllable degrees of freedom is equal to the total degrees of freedom-->
+	  <param name="Odom/Holonomic"		  type="string" value="false"/> <!--default true, A robot is holonomic when the number of controllable degrees of freedom is equal to the total degrees of freedom-->
 	  <param name="Odom/FilteringStrategy"    type="string" value="1"/>  <!--default 0=No filter, 1=Kalman, 2=Particle filtering-->
-
-           <param name="Reg/RepeatOnce"           type="string" value="true"/><!--default true, do a second registration with the output of the first registration as guess. Only done if no guess was provided for the first registration-->
+          <param name="RGBD/NeighborLinkRefining" type="string" value="true"/>
+          <param name="RGBD/ProximityBySpace"     type="string" value="true"/>
+          <param name="RGBD/AngularUpdate"        type="string" value="0.02"/>
+          <param name="RGBD/LinearUpdate"         type="string" value="0.01"/>
+          <param name="RGBD/OptimizeFromGraphEnd" type="string" value="true"/><!--false-->
+          <param name="Optimizer/Slam2D"          type="string" value="true"/>
+          <param name="Reg/RepeatOnce"            type="string" value="true"/><!--default true, do a second registration with the output of the first registration as guess. Only done if no guess was provided for the first registration-->
           <param name="Reg/Strategy"              type="string" value="2"/> <!-- 1=ICP ,0=Vis, 2=VisIcp-->
           <param name="Reg/Force3DoF"             type="string" value="true"/>
-
-              <!--Filter extracted keypoints by depth (0=inf)-->
-          <param name="Kp/MaxDepth"               type="string"  value="0.5"/>
-          <param name="Kp/MinDepth"               type="string"  value="3.5"/>
-        
-           
-           <param name="Vis/EstimationType"        type="string"    value="1"/><!--"Motion estimation approach: 0:3D->3D, 1:3D->2D (PnP), 2:2D->2D (Epipolar Geometry)")-->
-          <param name="Vis/MinInliers"            type="string" value="5"/><!--defalut 20,Minimum feature correspondences to compute/accept the transformation-->
-          <param name="Vis/InlierDistance"        type="string" value="0.1"/><!--Maximum distance for feature correspondences. Used by 3D->3D estimation approach-->
-         
-          
-          <param name="RGBD/NeighborLinkRefining" type="string" value="true"/><!--according to Reg/Strategy to refine neighbor link-->
-          <param name="RGBD/ProximityBySpace"     type="bool" value="true"/>
-          <param name="RGBD/AngularUpdate"        type="string" value="0.02"/><!--default 0.1-->
-          <param name="RGBD/LinearUpdate"         type="string" value="0.01"/><!--default 0.1-->
-          <param name="RGBD/OptimizeFromGraphEnd" type="string" value="true"/><!--false-->
-       
-
-             <param name="RGBD/LocalRadius"          type="string"  value="10"/><!--Local radius (m) for nodes selection in the local map-->
-
-          <param name="RGBD/ProximityMaxGraphDepth"    type="string"  value="50"/> <!--default 50--> 
-          <param name="RGBD/ProximityPathMaxNeighbors" type="int"  value="10"/><!--default 0,maximum nodes compared-->  
-
-
-
-
-<param name="Optimizer/Slam2D"          type="string" value="true"/>
+          <param name="Vis/MinInliers"            type="string" value="5"/>
+          <param name="Vis/InlierDistance"        type="string" value="0.1"/>
           <param name="Rtabmap/TimeThr"           type="string" value="700"/>
           <param name="Mem/RehearsalSimilarity"   type="string" value="0.45"/>
-          <param name="Mem/DepthAsMask"           type="bool"   value="false"/><!--Use depth image as mask when extracting features for vocabulary, default true-->
-
-
-
-	  <param name="Icp/CorrespondenceRatio"   type="string" value="0.1"/>
+	  <param name="Icp/CorrespondenceRatio"   type="string" value="0.2"/>
 	  <param name="Icp/MaxCorrespondenceDistance" type="string" value="0.2"/><!--if pointmatcherlib wasn't found, the default is 0.05, else default 0.1-->
-	  <param name="Icp/MaxTranslation"        type="string" value="0.2"/>
-          <param name="Icp/MaxRotation"           type="string" value="0.78"/>
-          <param name="Icp/Iterations"            type="int"    value="70"/>
-
-
-          <param name="Optimizer/Strategy"        type="string"    value="0"/><!--Graph optimization strategy: 0=TORO, 1=g2o and 2=GTSAM, note: be sure whether the intended lib has been installed-->
-
-          <param name="Grid/FromDepth"            type="bool"  value="false"/>
-
-  
-         
+	  <param name="Icp/MaxTranslation" type="string" value="0.2"/>
+          <param name="Icp/MaxRotation" type="string" value="0.78"/>
+          <param name="Grid/FromDepth"            type="bool"    value="false"/><!--default true, value should be set to false when the subscribe_scan is true, the scans would be used to build the grid map instead of using data from depth image-->
     </node>
-
  <node if="$(arg rtabmapviz)" pkg="rtabmap_ros" type="rtabmapviz" name="rtabmapviz" args="-d $(find rtabmap_ros)/launch/config/rgbd_gui.ini" output="screen">
   	  <param name="subscribe_depth"     type="bool" value="true"/>
       <param name="subscribe_laserScan" type="bool" value="true"/>

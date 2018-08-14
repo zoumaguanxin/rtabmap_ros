@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+        <!--param name="use_sime_time" value="true"/-->
+        <arg name="position" value="0 0 0 0 0 0"/><!--x,y,z, Yaw(z),pitch(y),roll(x)-->
+	<!--publish the tf from camera_rgb_link to camera_link-->
+        <node pkg="tf" type="static_transform_publisher" name="camera_link_to_camera_rgb_frame" args="$(arg position) camera_link camera_rgb_frame  100"/>
+        
+	
+
+        
+	<!--node name="zed_center_to_camera_link" pkg="tf" type="static_transform_publisher" args="0 0 0 -$(arg pi/2) 0 -$(arg pi/2) camera_link zed_center 100" /-->
+
+</launch>
