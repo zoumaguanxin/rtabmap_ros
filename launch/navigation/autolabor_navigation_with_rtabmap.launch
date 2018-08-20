@@ -24,6 +24,7 @@
   <arg name="database_path"     default="/home/data/Documents/RTAB-Map/0809/office809old.db"/>
   <arg name="rgbd_odometry"     default="false"/>
   <arg name="rtabmapviz"        default="true"/>
+  <arg name="rviz"              default="true"/>
   <arg name="localization"      default="true"/>
   <arg name="simulation"        default="false"/>
   <arg     if="$(arg localization)" name="args"  default=""/>
@@ -41,9 +42,10 @@
       can be increase from 5 to 10 Hz to avoid some TF warnings.
   -->
   
-  <!-- Navigation stuff (move_base) -->
-  <include if="$(arg simulation)" file="$(find turtlebot_bringup)/launch/3dsensor.launch"/>
-  <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml"/>
+  <!-- Navigation stuff (move_base) --> 
+  <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml">
+    	<arg name="base_frame_id" value="base_link"/>
+  </include>
   
   <!-- Mapping -->
   <group ns="rtabmap">
@@ -115,6 +117,6 @@
       <remap from="rgb/camera_info" to="$(arg camera_info_topic)"/>
       <remap from="scan"            to="/scan"/>
     </node>
-    
+    <include if="$(arg rviz)" file="$(find rtabmap_sa)/launch/navigation/autolabor_navigation_rviz.launch"/>
   </group>
 </launch>

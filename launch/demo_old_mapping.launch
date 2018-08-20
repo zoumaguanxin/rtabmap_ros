@@ -3,9 +3,9 @@
   <!--include file="$(find autolabor_keyboard_control)/launch/keyboard_move.launch"/>
   <include file="$(find rtabmap_sa)/launch/kinect_rplidar.launch"/-->
   <include file="$(find rtabmap_sa)/launch/camera_tf.launch"/> <!--this launch is used to publish tf from camera_rgb_frame to camera_link. if this transform has been publish correctly, comment this line-->  
-  <arg name="rtabmapviz" default="true"/>
+  <arg name="rtabmapviz" default="false"/>
   <arg name="hector"     value="false"/>
-  <arg name="rviz" default="false"/>
+  <arg name="rviz" default="true"/>
   <param name="use_sim_time" type="bool"  value="true"/>
   <group ns="rtabmap">
     <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen" args="--delete_db_on_start">

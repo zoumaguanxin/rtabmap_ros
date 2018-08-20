@@ -1,7 +1,11 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="angular_filter"  default="false"/>
   <!--include file="$(find autolabor_keyboard_control)/launch/keyboard_move.launch"/>
   <include file="$(find rtabmap_sa)/launch/kinect_rplidar.launch"/-->
   <include file="$(find rtabmap_sa)/launch/camera_tf.launch"/> <!--this launch is used to publish tf from camera_rgb_frame to camera_link. if this transform has been publish correctly, comment this line-->  
-  <include file="$(find rtabmap_sa)/launch/odom_rplidar_xtion_mapping.launch"/>
+  <include if="$(arg angular_filter)" file="$(find laser_filters)/examples/angular_filter.launch"/>
+  <include file="$(find rtabmap_sa)/launch/odom_rplidar_xtion_mapping.launch">
+  <arg if="$(arg angular_filter)" name="scan_topic" value="/scan_filtered"/>
+  </include>
 </launch>

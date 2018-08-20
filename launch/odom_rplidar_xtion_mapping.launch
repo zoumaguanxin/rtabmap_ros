@@ -2,9 +2,10 @@
 <launch>
   <!--include file="$(find autolabor_keyboard_control)/launch/keyboard_move.launch"/>
   <include file="$(find rtabmap_sa)/launch/kinect_rplidar.launch"/-->
-  <arg name="rtabmapviz" default="true"/>
+  <arg name="rtabmapviz" default="false"/>
   <arg name="hector"     value="false"/>
-  <arg name="rviz" default="false"/>
+  <arg name="rviz" default="true"/>
+  <arg name="scan_topic" default="/scan"/>
   <group ns="rtabmap">
     <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen" args="--delete_db_on_start">
           <param name="frame_id" type="string" value="base_link"/>
@@ -14,7 +15,7 @@
 
           <remap from="odom" to="/odom"/>
           <!--notice:  the default is "/base_scan", was revised as "/scan"--> 
-          <remap from="scan" to="/scan"/>
+          <remap from="scan" to="$(arg scan_topic)"/>
 
           <remap from="rgb/image" to="/camera/rgb/image_rect_color"/>
           <remap from="depth/image" to="/camera/depth_registered/image_raw"/>
@@ -38,7 +39,7 @@
           <param name="Kp/MinDepth"               type="string"  value="3.5"/>
         
            
-           <param name="Vis/EstimationType"        type="string"    value="1"/><!--"Motion estimation approach: 0:3D->3D, 1:3D->2D (PnP), 2:2D->2D (Epipolar Geometry)")-->
+          <param name="Vis/EstimationType"        type="string"    value="1"/><!--"Motion estimation approach: 0:3D->3D, 1:3D->2D (PnP), 2:2D->2D (Epipolar Geometry)")-->
           <param name="Vis/MinInliers"            type="string" value="5"/><!--defalut 20,Minimum feature correspondences to compute/accept the transformation-->
           <param name="Vis/InlierDistance"        type="string" value="0.1"/><!--Maximum distance for feature correspondences. Used by 3D->3D estimation approach-->
          
@@ -48,7 +49,7 @@
           <param name="RGBD/AngularUpdate"        type="string" value="0.02"/><!--default 0.1-->
           <param name="RGBD/LinearUpdate"         type="string" value="0.01"/><!--default 0.1-->
           <param name="RGBD/OptimizeFromGraphEnd" type="string" value="true"/><!--false-->
-       
+          
 
              <param name="RGBD/LocalRadius"          type="string"  value="10"/><!--Local radius (m) for nodes selection in the local map-->
 
@@ -60,7 +61,7 @@
 
 <param name="Optimizer/Slam2D"          type="string" value="true"/>
           <param name="Rtabmap/TimeThr"           type="string" value="700"/>
-          <param name="Mem/RehearsalSimilarity"   type="string" value="0.45"/>
+          <param name="Mem/RehearsalSimilarity"   type="string" value="0.55"/><!--0.45-->
           <param name="Mem/DepthAsMask"           type="bool"   value="false"/><!--Use depth image as mask when extracting features for vocabulary, default true-->
 
 
@@ -73,15 +74,22 @@
 
 
           <param name="Optimizer/Strategy"        type="string"    value="0"/><!--Graph optimization strategy: 0=TORO, 1=g2o and 2=GTSAM, note: be sure whether the intended lib has been installed-->
-
-          <param name="Grid/FromDepth"            type="bool"  value="false"/>
-
-  
+      
+          <!--grid map parameters-->
+          <param name="Grid/FromDepth"              type="bool"  value="false"/>
+          <param name="GridGlobal/OctoMapOccupancyThr" value="0.5"/>
+          <param name="Grid/RangeMax"               type="string" value="8.0"/>
+          <param name="GridGlobal/OccupancyThr"     type="string" value="0.65"/>
+          <param name="GridGlobal/ProbClampingMax"  type="string" value="0.971"/>
+          <param name="GridGlobal/ProbClampingMin" type="string" value="0.1192"/> 
+          <param name="GridGlobal/ProbHit"          type="string"  value="0.7"/>
+          <param name="GridGlobal/ProbMiss"         type="string"  value="0.4"/>
+     
          
     </node>
 
  <node if="$(arg rtabmapviz)" pkg="rtabmap_ros" type="rtabmapviz" name="rtabmapviz" args="-d $(find rtabmap_ros)/launch/config/rgbd_gui.ini" output="screen">
-  	  <param name="subscribe_depth"     type="bool" value="true"/>
+      <param name="subscribe_depth"     type="bool" value="true"/>
       <param name="subscribe_laserScan" type="bool" value="true"/>
       <param name="frame_id"            type="string" value="base_link"/>
       <param unless="$(arg hector)" name="subscribe_odom_info" type="bool" value="true"/>
