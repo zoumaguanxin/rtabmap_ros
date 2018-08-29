@@ -20,8 +20,10 @@
        from 3.3.2 of the "Autonomous Navigation of a Known Map with TurtleBot" tutorial:
        http://wiki.ros.org/turtlebot_navigation/Tutorials/Autonomously%20navigate%20in%20a%20known%20map      
   -->
-  <include file="$(find rtabmap_sa)/launch/camera_tf.launch"/>
-  <arg name="database_path"     default="/home/data/Documents/RTAB-Map/0809/office809old.db"/>
+  <arg name="publish_tf" value="true"/>
+  <include if="$(arg publish_tf)"
+	   file="$(find rgbd_launch)/launch/kinect_frames.launch"/>
+  <arg name="database_path"     default="/home/data/Documents/RTAB-Map/821/flr_821_best.db"/>
   <arg name="rgbd_odometry"     default="false"/>
   <arg name="rtabmapviz"        default="true"/>
   <arg name="rviz"              default="true"/>
