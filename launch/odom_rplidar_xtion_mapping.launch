@@ -28,27 +28,28 @@
           <!-- RTAB-Map's parameters -->
  	  <param name="Odom/Strategy" 	          type="string" value="1"/>  <!--default 0=frame to map, 1=frame2frame,2=Fovis, 3=viso2, 4=DVO-SLAM, 5=ORB_SLAM2-->
 	  <param name="Odom/Holonomic"		  type="string" value="false"/> <!--default 1, A robot is holonomic when the number of controllable degrees of freedom is equal to the total degrees of freedom-->
-	  <param name="Odom/FilteringStrategy"    type="string" value="1"/>  <!--default 0=No filter, 1=Kalman, 2=Particle filtering-->
+	  <param name="Odom/FilteringStrategy"    type="string" value="0"/>  <!--default 0=No filter, 1=Kalman, 2=Particle filtering-->
 
            <param name="Reg/RepeatOnce"           type="string" value="true"/><!--default true, do a second registration with the output of the first registration as guess. Only done if no guess was provided for the first registration-->
           <param name="Reg/Strategy"              type="string" value="2"/> <!-- 1=ICP ,0=Vis, 2=VisIcp-->
           <param name="Reg/Force3DoF"             type="string" value="true"/>
 
               <!--Filter extracted keypoints by depth (0=inf)-->
-          <param name="Kp/MaxDepth"               type="string"  value="0.5"/>
-          <param name="Kp/MinDepth"               type="string"  value="3.5"/>
-        
+          <param name="Kp/MaxDepth"               type="string"  value="3.5"/>
+          <param name="Kp/MinDepth"               type="string"  value="0.5"/>
+          
            
           <param name="Vis/EstimationType"        type="string"    value="1"/><!--"Motion estimation approach: 0:3D->3D, 1:3D->2D (PnP), 2:2D->2D (Epipolar Geometry)")-->
-          <param name="Vis/MinInliers"            type="string" value="5"/><!--defalut 20,Minimum feature correspondences to compute/accept the transformation-->
+          <param name="Vis/MinInliers"            type="string" value="20"/><!--defalut 20,Minimum feature correspondences to compute/accept the transformation-->
           <param name="Vis/InlierDistance"        type="string" value="0.1"/><!--Maximum distance for feature correspondences. Used by 3D->3D estimation approach-->
+          <param name="Vis/DepthAsMask"          type="bool"   value="false"/><!--default true-->
          
           
           <param name="RGBD/NeighborLinkRefining" type="string" value="true"/><!--according to Reg/Strategy to refine neighbor link-->
           <param name="RGBD/ProximityBySpace"     type="bool" value="true"/>
           <param name="RGBD/AngularUpdate"        type="string" value="0.02"/><!--default 0.1-->
           <param name="RGBD/LinearUpdate"         type="string" value="0.01"/><!--default 0.1-->
-          <param name="RGBD/OptimizeFromGraphEnd" type="string" value="true"/><!--false-->
+          <param name="RGBD/OptimizeFromGraphEnd" type="string" value="false"/><!--false-->
           
 
              <param name="RGBD/LocalRadius"          type="string"  value="10"/><!--Local radius (m) for nodes selection in the local map-->
@@ -59,21 +60,28 @@
 
 
 
-<param name="Optimizer/Slam2D"          type="string" value="true"/>
+          <param name="Optimizer/Slam2D"          type="string" value="true"/>
+          <param name="Optimizer/Strategy"        type="string"    value="1"/><!--Graph optimization strategy: 0=TORO, 1=g2o and 2=GTSAM, note: be sure whether the intended lib has been installed; Test found that g2o is better than TORO, GTSAM doesn't work for unknown reason-->
           <param name="Rtabmap/TimeThr"           type="string" value="700"/>
-          <param name="Mem/RehearsalSimilarity"   type="string" value="0.55"/><!--0.45-->
-          <param name="Mem/DepthAsMask"           type="bool"   value="false"/><!--Use depth image as mask when extracting features for vocabulary, default true-->
+          <param name="Mem/RehearsalSimilarity"   type="string" value="0.45"/><!--0.45-->
+          <param name="Mem/DepthAsMask"           type="bool"   value="false"/><!--Use depth image as mask when extracting features for vocabulary, default true; Test found that the false is better than true at cost of computation effiency-->
+          <param name="Mem/ReduceGraph"            type="bool"  value="true"/>
 
 
-
+          
+          <param name="Icp/PM" 			  type="bool" value="true"/><!--actually, it is Trimmed ICP-->
+          <param name="Icp/PMMatcherKnn"          type="int"  value="1"/>
+          <param name="Icp/PMConfig "             value=""/>
+          <param name="Icp/PMOutlierRatio"        type="string"    value="0.95"/>
 	  <param name="Icp/CorrespondenceRatio"   type="string" value="0.1"/>
+          <!--when libpointmatcher was found, the default is pm instead of icp algorithm in PCL. But the following parameter still works, it works before parameters oof PM -->
 	  <param name="Icp/MaxCorrespondenceDistance" type="string" value="0.2"/><!--if pointmatcherlib wasn't found, the default is 0.05, else default 0.1-->
 	  <param name="Icp/MaxTranslation"        type="string" value="0.2"/>
           <param name="Icp/MaxRotation"           type="string" value="0.78"/>
-          <param name="Icp/Iterations"            type="int"    value="70"/>
+          <param name="Icp/Iterations"            type="int"    value="50"/><!--The quality of map will be improved with the increasing of the Interations, but when  up to 70, iterations is irrevalent to quality of map-->
 
 
-          <param name="Optimizer/Strategy"        type="string"    value="0"/><!--Graph optimization strategy: 0=TORO, 1=g2o and 2=GTSAM, note: be sure whether the intended lib has been installed-->
+         
       
           <!--grid map parameters-->
           <param name="Grid/FromDepth"              type="bool"  value="false"/>
@@ -81,7 +89,7 @@
           <param name="Grid/RangeMax"               type="string" value="8.0"/>
           <param name="GridGlobal/OccupancyThr"     type="string" value="0.65"/>
           <param name="GridGlobal/ProbClampingMax"  type="string" value="0.971"/>
-          <param name="GridGlobal/ProbClampingMin" type="string" value="0.1192"/> 
+          <param name="GridGlobal/ProbClampingMin"  type="string" value="0.1192"/> 
           <param name="GridGlobal/ProbHit"          type="string"  value="0.7"/>
           <param name="GridGlobal/ProbMiss"         type="string"  value="0.4"/>
      
