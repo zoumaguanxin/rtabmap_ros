@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+        <arg name="pi/2" value="1.5707963267948966"/>
+	<arg name="optical_rotate" value="0.245 0 0.595 0 0 0"/>
+        <arg name="laser_position" value="0 0 0.672 -3.314444 0 0"/>
+    	<!--publish the tf from camera_link to base_link-->
+	<node pkg="tf" type="static_transform_publisher" name="camera_to_base_link" args="$(arg optical_rotate) base_link camera_link 100"/>
+	<!--publish the tf from laser to base_link-->
+        <node pkg="tf" type="static_transform_publisher" name="laser_to_base_link" args="$(arg laser_position) base_link laser 100"/>
+        
+	<include file="$(find rplidar_ros)/launch/rplidar.launch"/>
+	
+	<!--camera node-->
+		<include file="$(find openni2_launch)/launch/openni2.launch">
+                <arg name="depth_registration" value="true"/>
+       	</include>
+ 	<include file="$(find autolabor_keyboard_control)/launch/keyboard_move.launch"/>        
+
+        
+	<!--node name="zed_center_to_camera_link" pkg="tf" type="static_transform_publisher" args="0 0 0 -$(arg pi/2) 0 -$(arg pi/2) camera_link zed_center 100" /-->
+
+</launch>
