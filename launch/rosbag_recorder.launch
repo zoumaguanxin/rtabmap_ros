@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <launch>
 
-<arg name="topics" value="/tf /scan /odom /camera/rgb/image_rect_color /camera/rgb/camera_info /camera/depth_registered/image_raw /camera/left/image_rect_color /camera/left/camera_info /camera/right/image_rect /camera/right/camera_info /camera/rgbd_image"/>
+<arg name="topics" value="/tf /scan /odom /tf_static /camera/rgb/image_rect_color /camera/rgb/camera_info /camera/depth_registered/image_raw /camera/rgbd_image"/>
 
-<node name="rosbag" pkg="rosbag" type="record" args="$(arg topics) -O /home/data/rosdata/rosbag/flr3_820" output="screen"/>
+<node name="rosbag" pkg="rosbag" type="record" args="$(arg topics) -O /home/data/rosdata/rosbag/flr3_827_v4" output="screen"/>
 
 </launch>
